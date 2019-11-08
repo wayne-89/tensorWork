@@ -105,12 +105,12 @@ if not os.path.isfile(PATH_TO_IMAGE):
             IMAGE_PATHS.append(os.path.join(PATH_TO_IMAGE,filename))
 else:
     IMAGE_PATHS.append(PATH_TO_IMAGE)
-for PATH_TO_IMAGE in IMAGE_PATHS:
+for IMAGE_PATH in IMAGE_PATHS:
     # Load image using OpenCV and
     # expand image dimensions to have shape: [1, None, None, 3]
     # i.e. a single-column array, where each item in the column has the pixel RGB value
-    print('path####### {0}'.format(PATH_TO_IMAGE))
-    image = cv2.imread(PATH_TO_IMAGE)
+    print('path####### {0}'.format(IMAGE_PATH))
+    image = cv2.imread(IMAGE_PATH)
     image_expanded = np.expand_dims(image, axis=0)
 
     # Perform the actual detection by running the model with the image as input
@@ -131,14 +131,14 @@ for PATH_TO_IMAGE in IMAGE_PATHS:
         min_score_thresh=0.60)
 
     # All the results have been drawn on image. Now display the image.
-    FULL_NAME = PATH_TO_IMAGE.split("/")
+    FULL_NAME = IMAGE_PATH.split("/")
     SHOW_NAME = FULL_NAME[-1]
     # plt.figure(SHOW_NAME)
     # plt.imshow(image)
     if IMAGE_SHOW:
         cv2.imshow(SHOW_NAME, image)
     else:
-        write_path = os.path.join(CWD_PATH,'Valid_{0}'.format(SHOW_NAME))
+        write_path = os.path.join(PATH_TO_IMAGE,'Valid_{0}'.format(SHOW_NAME))
         print('valid write path: {0}'.format(write_path))
         cv2.imwrite(write_path, image)
 
