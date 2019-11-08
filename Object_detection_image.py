@@ -39,7 +39,7 @@ IMAGE_NAME = 'test_pot/4.jpg'
 
 # Grab path to current working directory
 CWD_PATH = os.getcwd()
-
+IMAGE_SHOW=False
 PATH_TO_CKPT=sys.argv[1]
 PATH_TO_LABELS=sys.argv[2]
 PATH_TO_IMAGE=sys.argv[3]
@@ -131,26 +131,24 @@ for PATH_TO_IMAGE in IMAGE_PATHS:
         min_score_thresh=0.60)
 
     # All the results have been drawn on image. Now display the image.
-    SHOW_NAME = PATH_TO_IMAGE.split("/")
-    SHOW_NAME = SHOW_NAME[-1]
+    FULL_NAME = PATH_TO_IMAGE.split("/")
+    SHOW_NAME = FULL_NAME[-1]
     # plt.figure(SHOW_NAME)
     # plt.imshow(image)
-    cv2.imshow(SHOW_NAME, image)
-    # plt.show()
-# plt.show()
-# cv2.imshow(SHOW_NAME, image)
-# image.show()
-# print(SHOW_NAME)
-# if HOLD_WINDOW:
+    if IMAGE_SHOW:
+        cv2.imshow(SHOW_NAME, image)
+    else:
+        cv2.imwrite(os.path.join(PATH_TO_IMAGE,'Valid_{0}'.format(SHOW_NAME)), image)
 
     # Press any key to close the image
-while(1):
-    c = cv2.waitKey(0)
-    print('loop wait esc')
-    if c == 27:
-        print('will close！！！！')
-        cv2.destroyAllWindows()
-        break
+if IMAGE_SHOW:
+    while(1):
+        c = cv2.waitKey(0)
+        print('loop wait esc')
+        if c == 27:
+            print('will close！！！！')
+            cv2.destroyAllWindows()
+            break
 
     # # Clean up
     # cv2.destroyAllWindows()
