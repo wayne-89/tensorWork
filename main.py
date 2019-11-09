@@ -65,14 +65,14 @@ dstConfigPath=os.path.join(dstPath,"train.config")
 f = open(dstConfigPath,'w')
 f.write(cfgData)
 f.close()
-print("###&###|train_start")
+print("###&###|train_running")
 # start train
 os.system('python {0}/train.py --logtostderr --train_dir={1}/training/ --pipeline_config_path={2}'.format(basePath,dstPath,dstConfigPath))
 # clean output
 os.system('rm -rf {0}/inference_graph'.format(dstPath))
 # export Inference Graph
 os.system('python {0}/export_inference_graph.py --input_type image_tensor --pipeline_config_path {1} --trained_checkpoint_prefix {2}/training/model.ckpt-{3} --output_directory {2}/inference_graph'.format(basePath,dstConfigPath,dstPath,numSteps))
-print("###&###|train_end")
+print("###&###|train_finish")
 
 
 
