@@ -65,7 +65,7 @@ dstConfigPath=os.path.join(dstPath,"train.config")
 f = open(dstConfigPath,'w')
 f.write(cfgData)
 f.close()
-print("###&###|train_running")
+print("###&###|train_starting")
 # start train
 os.system('python {0}/train.py --logtostderr --train_dir={1}/training/ --pipeline_config_path={2}'.format(basePath,dstPath,dstConfigPath))
 # clean output
