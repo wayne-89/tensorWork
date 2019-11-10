@@ -138,7 +138,7 @@ for IMAGE_PATH in IMAGE_PATHS:
     if IMAGE_SHOW:
         cv2.imshow(SHOW_NAME, image)
     else:
-        write_path = os.path.join(PATH_TO_IMAGE,'Valid_{0}'.format(SHOW_NAME))
+        write_path = os.path.join(PATH_TO_IMAGE,'result',SHOW_NAME)
         print('valid write path: {0}'.format(write_path))
         cv2.imwrite(write_path, image)
 

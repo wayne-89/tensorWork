@@ -67,11 +67,7 @@ f.write(cfgData)
 f.close()
 print("###&###|train_starting")
 # start train
-try:
-	os.system('python {0}/train.py --logtostderr --train_dir={1}/training/ --pipeline_config_path={2}'.format(basePath,dstPath,dstConfigPath))
-except Exception as ex:
-	print(ex,", something error")
-	exit()
+os.system('python {0}/train.py --logtostderr --train_dir={1}/training/ --pipeline_config_path={2}'.format(basePath,dstPath,dstConfigPath))
 # clean output
 os.system('rm -rf {0}/inference_graph'.format(dstPath))
 # export Inference Graph

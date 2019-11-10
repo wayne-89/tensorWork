@@ -8,7 +8,7 @@ import configparser
 curPath = sys.path[0]
 basePath = curPath
 workPath = curPath
-dstPath=sys.argv[1]
+dstPath = sys.argv[1]
 if len(sys.argv) >= 3:
 	dstImage=sys.argv[2]
 else:
