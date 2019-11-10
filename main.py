@@ -58,7 +58,7 @@ os.system('python {0}/generate_tfrecord.py --csv_input={1}/images/test_labels.cs
 
 # generate train config
 with open (os.path.join(workPath,"faster_rcnn_inception_default.config"), "r") as cfgFile:
-    cfgData = cfgFile.read()
+	cfgData = cfgFile.read()
 cfgData = cfgData.replace('${num_classes}',str(numClasses)).replace('${num_examples}',str(numExamples)).replace('${train_record_path}',os.path.join(dstPath,'train.record')).replace('${test_record_path}',os.path.join(dstPath,'test.record')).replace('${label_map_path}',labelMapPath).replace('${num_steps}',numSteps).replace('${train_check_point}',trainCheckPoint)
 # write label map
 dstConfigPath=os.path.join(dstPath,"train.config")
@@ -67,7 +67,11 @@ f.write(cfgData)
 f.close()
 print("###&###|train_starting")
 # start train
-os.system('python {0}/train.py --logtostderr --train_dir={1}/training/ --pipeline_config_path={2}'.format(basePath,dstPath,dstConfigPath))
+try:
+	os.system('python {0}/train.py --logtostderr --train_dir={1}/training/ --pipeline_config_path={2}'.format(basePath,dstPath,dstConfigPath))
+except Exception as ex:
+	print(ex,", something error")
+	exit()
 # clean output
 os.system('rm -rf {0}/inference_graph'.format(dstPath))
 # export Inference Graph
