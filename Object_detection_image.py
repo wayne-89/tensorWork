@@ -73,8 +73,8 @@ if sys.argv[5] is not None:
     print('loaddddded',loaded)
     loaded = json.loads(loaded)
     for key in loaded:
-        print('loadddddedkey',loaded[key])
-        loaded[key] = (u' ' + loaded[key]).encode('utf-8').strip()
+        print('loadddddedkey',u'AA'+loaded[key])
+        # loaded[key] = (u' ' + loaded[key]).encode('utf-8').strip()
         # print('bbbbbbbbbb',loaded[key])
         # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
     labelNameMap = loaded
