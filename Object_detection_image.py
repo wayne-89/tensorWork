@@ -21,6 +21,8 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import sys
+import json
+
 # import matplotlib
 # matplotlib.use('TkAgg')
 # import matplotlib.pyplot as plt
@@ -43,6 +45,7 @@ IMAGE_SHOW=False
 PATH_TO_CKPT=sys.argv[1]
 PATH_TO_LABELS=sys.argv[2]
 PATH_TO_IMAGE=sys.argv[3]
+labelNameMap={}
 # Path to frozen detection graph .pb file, which contains the model that is used
 # for object detection.
 if PATH_TO_CKPT is None:
@@ -61,6 +64,9 @@ if sys.argv[4] is None:
     NUM_CLASSES = 6
 else:
     NUM_CLASSES=int(sys.argv[4])
+
+if sys.argv[5] is not None:
+    labelNameMap=json.loads(sys.argv[5])
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
 # network predicts `5`, we know that this corresponds to `king`.
@@ -120,7 +126,13 @@ for IMAGE_PATH in IMAGE_PATHS:
 
     # Draw the results of the detection (aka 'visulaize the results')
 
-    print('image params ',boxes,classes,scores,category_index)
+    print('image params ',labelNameMap,category_index)
+    for key in category_index:
+        _label=category_index[key]
+        _name=labelNameMap[_label['name']]
+        if _name:
+            _label['name']=_name
+    print('image params after',category_index)
 
     v_res=vis_util.visualize_boxes_and_labels_on_image_array(
         image,
@@ -131,7 +143,7 @@ for IMAGE_PATH in IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=8,
         min_score_thresh=0.60)
-    print('v_res',v_res)
+    print('v_res 识别数量: ',len(v_res)
     # All the results have been drawn on image. Now display the image.
     FULL_NAME = IMAGE_PATH.split("/")
     SHOW_NAME = FULL_NAME[-1]
