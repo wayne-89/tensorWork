@@ -201,15 +201,14 @@ def draw_bounding_box_on_image(image,
              (right, top), (left, top)], width=thickness, fill=color)
   try:
     font = ImageFont.truetype('arialuni.ttf', 24)
-    # font = ImageFont.load_default()
+    # font = ImageFont.truetype('arial.ttf', 24)
   except IOError:
     font = ImageFont.load_default()
 
   # If the total height of the display strings added to the top of the bounding
   # box exceeds the top of the image, stack the strings below the bounding box
   # instead of above.
-  print('吴莎莎哈哈哈哈哈',display_str_list,font.getsize('哈'))
-  display_str_heights = [11 for ds in display_str_list]
+  display_str_heights = [font.getsize(ds)[1] for ds in display_str_list]
   # Each display_str has a top and bottom margin of 0.05x.
   total_display_str_height = (1 + 2 * 0.05) * sum(display_str_heights)
 
@@ -219,8 +218,7 @@ def draw_bounding_box_on_image(image,
     text_bottom = bottom + total_display_str_height
   # Reverse list and print from bottom to top.
   for display_str in display_str_list[::-1]:
-    text_width, text_height = (len(display_str)*6,11)
-    # text_width, text_height = font.getsize(display_str)
+    text_width, text_height = font.getsize(display_str)
     margin = np.ceil(0.05 * text_height)
     draw.rectangle(
         [(left, text_bottom - text_height - 2 * margin), (left + text_width,

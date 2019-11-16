@@ -70,8 +70,7 @@ else:
 if sys.argv[5] is not None:
     print('labelNameMapStr',sys.argv[5])
     # labelNameMap=ast.literal_eval(sys.argv[5])
-    labelNameMap=u'{"5db945f491a663eb188e82ce":"螺母B","5db945c891a663eb188e82cb":"螺母A","5db945d991a663eb188e82cc":"螺丝B","5db945c391a663eb188e82ca":"螺丝A"}'
-    labelNameMap=json.loads(labelNameMap)
+    labelNameMap=json.loads(sys.argv[5])
     print('labelNameMapStr labelNameMap',labelNameMap)
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
