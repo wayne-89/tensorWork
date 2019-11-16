@@ -72,7 +72,7 @@ if sys.argv[5] is not None:
     loaded = json.loads(loaded)
     for key in loaded:
         loaded[key] = u' '.join(loaded[key]).strip()
-        print('bbbbbbbbbb',loaded[key])
+        # print('bbbbbbbbbb',loaded[key])
         # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
     labelNameMap = loaded
     # print('labelNameMapStr labelNameMap', labelNameMap)
