@@ -159,7 +159,7 @@ for IMAGE_PATH in IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=8,
         min_score_thresh=0.60)
-    print('v_res 识别数量: ', len(v_res))
+    # print('v_res 识别数量: ', len(v_res))
     # All the results have been drawn on image. Now display the image.
     FULL_NAME = IMAGE_PATH.split("/")
     SHOW_NAME = FULL_NAME[-1]
