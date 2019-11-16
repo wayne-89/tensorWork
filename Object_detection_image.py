@@ -133,7 +133,7 @@ for IMAGE_PATH in IMAGE_PATHS:
         print('.........lable',_label)
         _name=_label['name']
         if _name in labelNameMap:
-            _label.name=labelNameMap[_name]
+            _label['name']=labelNameMap[_name]
     print('image params after',category_index)
 
     v_res=vis_util.visualize_boxes_and_labels_on_image_array(
