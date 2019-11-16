@@ -68,8 +68,8 @@ else:
 
 if sys.argv[5] is not None:
     # labelNameMap=ast.literal_eval(sys.argv[5])
-    loaded = json.loads(sys.argv[5])
-    labelNameMap = loaded
+    # loaded = json.loads(sys.argv[5])
+    labelNameMap = sys.argv[5]
     # print('labelNameMapStr labelNameMap', labelNameMap)
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
