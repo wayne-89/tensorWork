@@ -68,10 +68,11 @@ else:
 
 if sys.argv[5] is not None:
     # labelNameMap=ast.literal_eval(sys.argv[5])
-    loaded = json.loads(sys.argv[5])
-    for key in loaded:
-        loaded[key] = u' '.join((loaded[key])).encode('utf-8').strip()
-        # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
+    loaded= u' '.join(sys.argv[5]).encode('utf-8').strip()
+    loaded = json.loads(loaded)
+    # for key in loaded:
+    #     loaded[key] = u' '.join((loaded[key])).encode('utf-8').strip()
+    #     # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
     labelNameMap = loaded
     # print('labelNameMapStr labelNameMap', labelNameMap)
 # Load the label map.
