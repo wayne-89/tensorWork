@@ -68,7 +68,7 @@ else:
 
 if sys.argv[5] is not None:
     print('labelNameMapStr',sys.argv[5])
-    labelNameMap=json.loads(sys.argv[5])
+    labelNameMap=json.loads(sys.argv[5].decode('utf-8'))
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
 # network predicts `5`, we know that this corresponds to `king`.
