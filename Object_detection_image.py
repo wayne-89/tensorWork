@@ -73,6 +73,7 @@ if sys.argv[5] is not None:
     print('loaddddded',loaded)
     loaded = json.loads(loaded)
     for key in loaded:
+        loaded[key]=u'\udce8\udc9e\udcba\udce6\udcaf\udc8dB'
         print('loadddddedkey',u'AA'+loaded[key])
         # loaded[key] = (u' ' + loaded[key]).encode('utf-8').strip()
         # print('bbbbbbbbbb',loaded[key])
