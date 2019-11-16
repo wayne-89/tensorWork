@@ -1,4 +1,3 @@
-# coding=utf-8
 ######## Image Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
@@ -74,12 +73,12 @@ if sys.argv[5] is not None:
     # loaded="{\"5db945f491a663eb188e82ce\":\"\xe4\",\"5db945c891a663eb188e82cb\":\"\udce8\udc9e\udcba\udce6\udcaf\udc8dA\",\"5db945d991a663eb188e82cc\":\"\udce8\udc9e\udcba\udce4\udcb8\udc9dB\",\"5db945c391a663eb188e82ca\":\"\udce8\udc9e\udcba\udce4\udcb8\udc9dA\"}"
     # print('loaddddded',loaded)
     loaded = json.loads(sys.argv[5])
-    for key in loaded:
-        # loaded[key]=u'\udce8\udc9e\udcba\udce6\udcaf\udc8dB'
-        # print('loadddddedkey',loaded[key])
-        loaded[key] = loaded[key].encode('utf-8')
-        # print('bbbbbbbbbb',loaded[key])
-        # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
+    # for key in loaded:
+    #     # loaded[key]=u'\udce8\udc9e\udcba\udce6\udcaf\udc8dB'
+    #     # print('loadddddedkey',loaded[key])
+    #     loaded[key] = loaded[key].encode('utf-8')
+    #     # print('bbbbbbbbbb',loaded[key])
+    #     # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
     labelNameMap = loaded
     # print('labelNameMapStr labelNameMap', labelNameMap)
 # Load the label map.
