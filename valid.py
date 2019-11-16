@@ -4,6 +4,7 @@ import time
 import sys
 import configparser
 import json
+import codecs
 # os.system('conda activate tensorflow1')
 # init
 curPath = sys.path[0]
@@ -17,7 +18,8 @@ if len(sys.argv) >= 3:
 else:
 	dstImage=os.path.join(dstPath,"images/valid")
 if len(sys.argv) >= 4:
-	print('nnnnnnnnnnn',type(sys.argv[3]))
+	labelNameMap=codecs.decode(sys.argv[3],'utf-8')
+	print('nnnnnnnnnnn',type(sys.argv[3]),labelNameMap)
 	labelNameMap = sys.argv[3]
 cfgPath=os.path.join(dstPath,"config.conf")
 labelMapPath=os.path.join(dstPath,"labelmap.pbtxt")    
