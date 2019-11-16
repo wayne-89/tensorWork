@@ -130,9 +130,9 @@ for IMAGE_PATH in IMAGE_PATHS:
     print('image params ',labelNameMap,category_index)
     for key in category_index:
         _label=category_index[key]
-        _name=_label['name']
+        _name=_label.name
         if _name in labelNameMap:
-            _label['name']=labelNameMap[_name]
+            _label.name=labelNameMap[_name]
     print('image params after',category_index)
 
     v_res=vis_util.visualize_boxes_and_labels_on_image_array(
