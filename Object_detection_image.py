@@ -131,7 +131,7 @@ for IMAGE_PATH in IMAGE_PATHS:
     for key in category_index:
         _label=category_index[key]
         print('.........lable',_label)
-        _name=_label.name
+        _name=_label['name']
         if _name in labelNameMap:
             _label.name=labelNameMap[_name]
     print('image params after',category_index)
