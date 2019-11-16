@@ -1,3 +1,4 @@
+# coding=utf-8
 ######## Image Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
