@@ -3,6 +3,7 @@ import os
 import time
 import sys
 import configparser
+import json
 # os.system('conda activate tensorflow1')
 # init
 curPath = sys.path[0]
@@ -17,6 +18,8 @@ else:
 	dstImage=os.path.join(dstPath,"images/valid")
 if len(sys.argv) >= 4:
 	labelNameMap = sys.argv[3]
+	print(u'mmmmmmmmmmmmmmmmmmmmmm')
+	labelNameMap = json.loads(labelNameMap)
 cfgPath=os.path.join(dstPath,"config.conf")    
 labelMapPath=os.path.join(dstPath,"labelmap.pbtxt")    
 baseSection="base"
@@ -27,7 +30,8 @@ cf.read(cfgPath)
 numClasses = cf.get(baseSection,"num_classes")
 MODEL_NAME = 'inference_graph'
 PATH_TO_CKPT=os.path.join(dstPath,MODEL_NAME,'frozen_inference_graph.pb')
-print('mmmmmmmmmmmmmmmmmmmmmm',labelNameMap)
+
+print(u'mmmmmmmmmmmmmmmmmmmmmm',labelNameMap)
 os.system('python {0}/Object_detection_image.py {1} {2} {3} {4} {5}'.format(basePath,PATH_TO_CKPT,labelMapPath,dstImage,numClasses,labelNameMap))
 
 
