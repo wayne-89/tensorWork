@@ -24,7 +24,7 @@ import tensorflow as tf
 import sys
 import json
 import ast
-
+import urllib.parse
 # import matplotlib
 # matplotlib.use('TkAgg')
 # import matplotlib.pyplot as plt
@@ -73,7 +73,9 @@ if sys.argv[5] is not None:
     # loaded=u'{"5db945f491a663eb188e82ce":"\xe4","5db945c891a663eb188e82cb":"螺母A","5db945d991a663eb188e82cc":"螺丝B","5db945c391a663eb188e82ca":"螺丝A"}'
     # loaded="{\"5db945f491a663eb188e82ce\":\"\xe4\",\"5db945c891a663eb188e82cb\":\"\udce8\udc9e\udcba\udce6\udcaf\udc8dA\",\"5db945d991a663eb188e82cc\":\"\udce8\udc9e\udcba\udce4\udcb8\udc9dB\",\"5db945c391a663eb188e82ca\":\"\udce8\udc9e\udcba\udce4\udcb8\udc9dA\"}"
     # print('loaddddded',loaded)
-    loaded = json.loads(sys.argv[5])
+    loaded=urllib.parse.unquote(sys.argv[5])
+    print('loadddddedkey',loaded)
+    # loaded = json.loads(sys.argv[5])
     # for key in loaded:
     #     # loaded[key]=u'\udce8\udc9e\udcba\udce6\udcaf\udc8dB'
     #     # print('loadddddedkey',loaded[key])
