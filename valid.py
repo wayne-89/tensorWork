@@ -10,6 +10,7 @@ basePath = curPath
 workPath = curPath
 dstPath = sys.argv[1]
 labelNameMap={}
+print(sys.stdin.encoding, sys.stdout.encoding)
 if len(sys.argv) >= 3:
 	dstImage=sys.argv[2]
 else:
