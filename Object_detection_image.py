@@ -24,6 +24,7 @@ import tensorflow as tf
 import sys
 import json
 import ast
+
 # import matplotlib
 # matplotlib.use('TkAgg')
 # import matplotlib.pyplot as plt
@@ -42,36 +43,36 @@ IMAGE_NAME = 'test_pot/4.jpg'
 
 # Grab path to current working directory
 CWD_PATH = os.getcwd()
-IMAGE_SHOW=False
-PATH_TO_CKPT=sys.argv[1]
-PATH_TO_LABELS=sys.argv[2]
-PATH_TO_IMAGE=sys.argv[3]
-labelNameMap={}
+IMAGE_SHOW = False
+PATH_TO_CKPT = sys.argv[1]
+PATH_TO_LABELS = sys.argv[2]
+PATH_TO_IMAGE = sys.argv[3]
+labelNameMap = {}
 # Path to frozen detection graph .pb file, which contains the model that is used
 # for object detection.
 if PATH_TO_CKPT is None:
-    PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME,'frozen_inference_graph.pb')
+    PATH_TO_CKPT = os.path.join(CWD_PATH, MODEL_NAME, 'frozen_inference_graph.pb')
 
 # Path to label map file
 if PATH_TO_LABELS is None:
-    PATH_TO_LABELS = os.path.join(CWD_PATH,'training','labelmap.pbtxt')
+    PATH_TO_LABELS = os.path.join(CWD_PATH, 'training', 'labelmap.pbtxt')
 
 # Path to image
 if PATH_TO_IMAGE is None:
-    PATH_TO_IMAGE = os.path.join(CWD_PATH,IMAGE_NAME)
+    PATH_TO_IMAGE = os.path.join(CWD_PATH, IMAGE_NAME)
 
 # Number of classes the object detector can identify
 if sys.argv[4] is None:
     NUM_CLASSES = 6
 else:
-    NUM_CLASSES=int(sys.argv[4])
+    NUM_CLASSES = int(sys.argv[4])
 
 if sys.argv[5] is not None:
     # labelNameMap=ast.literal_eval(sys.argv[5])
-    loaded= (u' '+sys.argv[5]).strip()
+    loaded = (u' ' + sys.argv[5]).strip()
     loaded = json.loads(loaded)
     for key in loaded:
-        loaded[key] = u' '.join(loaded[key]).strip()
+        loaded[key] = (u' ' + loaded[key]).strip()
         # print('bbbbbbbbbb',loaded[key])
         # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
     labelNameMap = loaded
@@ -82,7 +83,8 @@ if sys.argv[5] is not None:
 # Here we use internal utility functions, but anything that returns a
 # dictionary mapping integers to appropriate string labels would be fine
 label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
-categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
+categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES,
+                                                            use_display_name=True)
 category_index = label_map_util.create_category_index(categories)
 
 # Load the Tensorflow model into memory.
@@ -113,11 +115,11 @@ detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
 # Number of objects detected
 num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
-IMAGE_PATHS=[]
+IMAGE_PATHS = []
 if not os.path.isfile(PATH_TO_IMAGE):
     for filename in os.listdir(PATH_TO_IMAGE):
         if filename.endswith(".JPG") or filename.endswith(".jpg"):
-            IMAGE_PATHS.append(os.path.join(PATH_TO_IMAGE,filename))
+            IMAGE_PATHS.append(os.path.join(PATH_TO_IMAGE, filename))
 else:
     IMAGE_PATHS.append(PATH_TO_IMAGE)
 for IMAGE_PATH in IMAGE_PATHS:
@@ -137,14 +139,14 @@ for IMAGE_PATH in IMAGE_PATHS:
 
     # print('image params ',labelNameMap,category_index)
     for key in category_index:
-        _label=category_index[key]
-        print('.........lable',_label)
-        _name=_label['name']
+        _label = category_index[key]
+        print('.........lable', _label)
+        _name = _label['name']
         if _name in labelNameMap:
-            _label['name']=labelNameMap[_name]
-    print('image params after',category_index)
+            _label['name'] = labelNameMap[_name]
+    print('image params after', category_index)
 
-    v_res=vis_util.visualize_boxes_and_labels_on_image_array(
+    v_res = vis_util.visualize_boxes_and_labels_on_image_array(
         image,
         np.squeeze(boxes),
         np.squeeze(classes).astype(np.int32),
@@ -153,7 +155,7 @@ for IMAGE_PATH in IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=8,
         min_score_thresh=0.60)
-    print('v_res 识别数量: ',len(v_res))
+    print('v_res 识别数量: ', len(v_res))
     # All the results have been drawn on image. Now display the image.
     FULL_NAME = IMAGE_PATH.split("/")
     SHOW_NAME = FULL_NAME[-1]
@@ -162,13 +164,13 @@ for IMAGE_PATH in IMAGE_PATHS:
     if IMAGE_SHOW:
         cv2.imshow(SHOW_NAME, image)
     else:
-        write_path = os.path.join(PATH_TO_IMAGE,'result',SHOW_NAME)
+        write_path = os.path.join(PATH_TO_IMAGE, 'result', SHOW_NAME)
         print('valid write path: {0}'.format(write_path))
         cv2.imwrite(write_path, image)
 
     # Press any key to close the image
 if IMAGE_SHOW:
-    while(1):
+    while (1):
         c = cv2.waitKey(0)
         print('loop wait esc')
         if c == 27:
