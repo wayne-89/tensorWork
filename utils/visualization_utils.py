@@ -208,7 +208,7 @@ def draw_bounding_box_on_image(image,
   # box exceeds the top of the image, stack the strings below the bounding box
   # instead of above.
   print('吴莎莎哈哈哈哈哈',display_str_list)
-  display_str_heights = [font.getsize(ds)[1] for ds in display_str_list]
+  display_str_heights = [font.getsize(u'螺母A')[1] for ds in display_str_list]
   # Each display_str has a top and bottom margin of 0.05x.
   total_display_str_height = (1 + 2 * 0.05) * sum(display_str_heights)
 
