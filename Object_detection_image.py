@@ -130,7 +130,7 @@ for IMAGE_PATH in IMAGE_PATHS:
 
     # Draw the results of the detection (aka 'visulaize the results')
 
-    print('image params ',labelNameMap,category_index)
+    # print('image params ',labelNameMap,category_index)
     for key in category_index:
         _label=category_index[key]
         print('.........lable',_label)
