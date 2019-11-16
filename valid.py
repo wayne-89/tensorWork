@@ -26,6 +26,7 @@ cf.read(cfgPath)
 numClasses = cf.get(baseSection,"num_classes")
 MODEL_NAME = 'inference_graph'
 PATH_TO_CKPT=os.path.join(dstPath,MODEL_NAME,'frozen_inference_graph.pb')
+print('mmmmmmmmmmmmmmmmmmmmmm',labelNameMap)
 os.system('python {0}/Object_detection_image.py {1} {2} {3} {4} {5}'.format(basePath,PATH_TO_CKPT,labelMapPath,dstImage,numClasses,labelNameMap))
 
 
