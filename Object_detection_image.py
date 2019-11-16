@@ -66,6 +66,7 @@ else:
     NUM_CLASSES=int(sys.argv[4])
 
 if sys.argv[5] is not None:
+    print('labelNameMapStr',labelNameMap)
     labelNameMap=json.loads(sys.argv[5])
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
