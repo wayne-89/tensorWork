@@ -120,7 +120,9 @@ for IMAGE_PATH in IMAGE_PATHS:
 
     # Draw the results of the detection (aka 'visulaize the results')
 
-    vis_util.visualize_boxes_and_labels_on_image_array(
+    print('image params ',boxes,classes,scores,category_index)
+
+    v_res=vis_util.visualize_boxes_and_labels_on_image_array(
         image,
         np.squeeze(boxes),
         np.squeeze(classes).astype(np.int32),
@@ -129,7 +131,7 @@ for IMAGE_PATH in IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=8,
         min_score_thresh=0.60)
-
+    print('v_res',v_res)
     # All the results have been drawn on image. Now display the image.
     FULL_NAME = IMAGE_PATH.split("/")
     SHOW_NAME = FULL_NAME[-1]
