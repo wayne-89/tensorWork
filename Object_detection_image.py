@@ -1,4 +1,5 @@
 # coding=utf-8
+# -*- coding: UTF-8 -*-
 ######## Image Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
@@ -23,7 +24,7 @@ import numpy as np
 import tensorflow as tf
 import sys
 import json
-
+import ast
 # import matplotlib
 # matplotlib.use('TkAgg')
 # import matplotlib.pyplot as plt
@@ -68,7 +69,7 @@ else:
 
 if sys.argv[5] is not None:
     print('labelNameMapStr',sys.argv[5])
-    labelNameMap=json.loads(sys.argv[5])
+    labelNameMap=ast.literal_eval(sys.argv[5])
     print('labelNameMapStr labelNameMap',labelNameMap)
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
