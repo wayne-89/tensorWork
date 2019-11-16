@@ -15,7 +15,7 @@ if len(sys.argv) >= 3:
 else:
 	dstImage=os.path.join(dstPath,"images/valid")
 if len(sys.argv) >= 4:
-    labelNameMap = sys.argv[3]
+	labelNameMap = sys.argv[3]
 cfgPath=os.path.join(dstPath,"config.conf")    
 labelMapPath=os.path.join(dstPath,"labelmap.pbtxt")    
 baseSection="base"
