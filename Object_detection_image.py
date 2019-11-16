@@ -25,6 +25,10 @@ import tensorflow as tf
 import sys
 import json
 import ast
+import sys
+# sys.setdefaultencoding() does not exist, here!
+reload(sys)  # Reload does the trick!
+sys.setdefaultencoding('UTF8')
 # import matplotlib
 # matplotlib.use('TkAgg')
 # import matplotlib.pyplot as plt
