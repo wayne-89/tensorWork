@@ -18,6 +18,8 @@ if len(sys.argv) >= 3:
 else:
 	dstImage=os.path.join(dstPath,"images/valid")
 if len(sys.argv) >= 4:
+	loaded=json.loads(sys.argv[3],'utf-8')
+	print('mmmmm',loaded)
 	labelNameMap = sys.argv[3]
 cfgPath=os.path.join(dstPath,"config.conf")
 labelMapPath=os.path.join(dstPath,"labelmap.pbtxt")    
