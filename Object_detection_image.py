@@ -69,24 +69,9 @@ else:
     NUM_CLASSES = int(sys.argv[4])
 
 if sys.argv[5] is not None:
-    # labelNameMap=ast.literal_eval(sys.argv[5])
-    # loaded = (u' ' + sys.argv[5]).strip()
-    # loaded=u'{"5db945f491a663eb188e82ce":"\xe4","5db945c891a663eb188e82cb":"螺母A","5db945d991a663eb188e82cc":"螺丝B","5db945c391a663eb188e82ca":"螺丝A"}'
-    # loaded="{\"5db945f491a663eb188e82ce\":\"\xe4\",\"5db945c891a663eb188e82cb\":\"\udce8\udc9e\udcba\udce6\udcaf\udc8dA\",\"5db945d991a663eb188e82cc\":\"\udce8\udc9e\udcba\udce4\udcb8\udc9dB\",\"5db945c391a663eb188e82ca\":\"\udce8\udc9e\udcba\udce4\udcb8\udc9dA\"}"
-    # print('loaddddded',loaded)
     loaded = urllib.parse.unquote(sys.argv[5])
-    print('loadddddedkey', loaded)
     loaded = json.loads(loaded)
-    print('loadddddedkey22222', loaded)
-
-    # for key in loaded:
-    #     # loaded[key]=u'\udce8\udc9e\udcba\udce6\udcaf\udc8dB'
-    #     # print('loadddddedkey',loaded[key])
-    #     loaded[key] = (u' '+loaded[key]).encode('utf-8').strip()
-    # print('bbbbbbbbbb',loaded[key])
-    # loaded[key]=loaded[key].encode('utf-8').decode('unicode_escape')
     labelNameMap = loaded
-    # print('labelNameMapStr labelNameMap', labelNameMap)
 # Load the label map.
 # Label maps map indices to category names, so that when our convolution
 # network predicts `5`, we know that this corresponds to `king`.
@@ -150,7 +135,6 @@ for IMAGE_PATH in IMAGE_PATHS:
     # print('image params ',labelNameMap,category_index)
     for key in category_index:
         _label = category_index[key]
-        print('.........lable', _label)
         _name = _label['name']
         if _name in labelNameMap:
             _label['name'] = labelNameMap[_name]
