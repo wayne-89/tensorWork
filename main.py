@@ -41,6 +41,12 @@ if trainCheckPoint is None:
 print("train check point use: ", trainCheckPoint)
 # loss=cf.get(baseSection,"loss")
 numSteps = cf.get(baseSection, "num_steps")
+learningRate = cf.get(baseSection, "learning_rate")
+batchSize = cf.get(baseSection, "batch_size")
+if batchSize is None:
+    batchSize = 1
+if learningRate is None:
+    learningRate = 0.0002
 labels = cf.items(labelSection)
 print('num_classes num_examples', numClasses, numExamples)
 print('label_map', labels)
@@ -69,7 +75,8 @@ cfgData = cfgData.replace('${num_classes}', str(numClasses)).replace('${num_exam
     '${train_record_path}', os.path.join(dstPath, 'train.record')).replace('${test_record_path}', os.path.join(dstPath,
                                                                                                                'test.record')).replace(
     '${label_map_path}', labelMapPath).replace('${num_steps}', numSteps).replace('${train_check_point}',
-                                                                                 trainCheckPoint)
+                                                                                 trainCheckPoint).replace(
+    '${learning_rate}', learningRate).replace('${batch_size}', batchSize)
 # write label map
 dstConfigPath = os.path.join(dstPath, "train.config")
 f = open(dstConfigPath, 'w')
@@ -87,4 +94,3 @@ os.system(
     'python {0}/export_inference_graph.py --input_type image_tensor --pipeline_config_path {1} --trained_checkpoint_prefix {2}/training/model.ckpt-{3} --output_directory {2}/inference_graph'.format(
         basePath, dstConfigPath, dstPath, numSteps))
 print("###&###|train_finish")
-
