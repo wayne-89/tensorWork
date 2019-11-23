@@ -132,7 +132,7 @@ def _data_pre_aug_fn(data):
     width = img_shape[1]
     center = (width * 0.5, height * 0.5)  # x, y
     res = []
-    for deg in [90, 180, 270]:
+    for deg in [180]:
         neww, newh = _largest_rotated_rect(width, height, deg)
         newx = int(center[0] - neww * 0.5)
         newy = int(center[1] - newh * 0.5)
