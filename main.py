@@ -20,7 +20,9 @@ labelSection = "label"
 cf = configparser.ConfigParser()
 cf.read(cfgPath)
 numClasses = cf.get(baseSection, "num_classes")
-rotateImage = cf.get(baseSection, "rotate_image", "false")
+rotateImage = 'false'
+if cf.has_option(baseSection, "rotate_image"):
+    rotateImage = cf.get(baseSection, "rotate_image")
 numExamples = len([name for name in os.listdir(os.path.join(dstPath, 'images/test')) if
                    name.lower().endswith((".jpg", ".png", ".bmp"))])
 trainCheckPoint = None
