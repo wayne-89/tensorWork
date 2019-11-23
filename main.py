@@ -20,6 +20,7 @@ labelSection = "label"
 cf = configparser.ConfigParser()
 cf.read(cfgPath)
 numClasses = cf.get(baseSection, "num_classes")
+rotateImage = cf.get(baseSection, "rotate_image")
 numExamples = len([name for name in os.listdir(os.path.join(dstPath, 'images/test')) if
                    name.lower().endswith((".jpg", ".png", ".bmp"))])
 trainCheckPoint = None
@@ -59,6 +60,11 @@ f.close()
 
 # generate csv
 os.system('python {0}/xml_to_csv.py {1}'.format(basePath, dstPath))
+
+# rotate image
+if rotateImage == 'true':
+    os.system('python {0}/rotate_image_label.py {1}/images/train {1}/images/train_labels.csv'.format(basePath, dstPath))
+    os.system('python {0}/rotate_image_label.py {1}/images/test {1}/images/test_labels.csv'.format(basePath, dstPath))
 
 # generate TFrecord
 os.system(
