@@ -20,6 +20,7 @@ labelSection = "label"
 cf = configparser.ConfigParser()
 cf.read(cfgPath)
 numClasses = cf.get(baseSection, "num_classes")
+print('baseSection', baseSection, cf.has_option(baseSection, "rotate_image"))
 rotateImage = 'false'
 if cf.has_option(baseSection, "rotate_image"):
     rotateImage = cf.get(baseSection, "rotate_image")

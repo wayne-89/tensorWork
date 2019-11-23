@@ -51,7 +51,7 @@ def csv_cfg_map(path):
                     cfg_map[list[0]] = []
                 cfg_map[list[0]].append(list)
             i = i + 1
-    print('csv_cfg_map', cfg_map)
+    # print('csv_cfg_map', cfg_map)
     return cfg_map
 
 
@@ -146,7 +146,7 @@ def _data_pre_aug_fn(data):
             img_name = "{0}_{1}.{2}".format(name, deg, suffix)
             coords_new.append([img_name, str(neww), str(newh), coord[3], str(x), str(y), str(x2), str(y2)])
         sub_img = rotate_image(img, deg)
-        print(img_shape, deg, coords, coords_new)
+        # print(img_shape, deg, coords, coords_new)
         res.append([sub_img, coords_new])
     return res
 
