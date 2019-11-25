@@ -178,7 +178,7 @@ data = tl.prepro.threading_data([_ for _ in zip(b_images, ann_list)],
 with open(PATH_TO_LABELS, 'a+') as f:
     i = 1
     for img_datas in data:
-        if i <= 3:
+        if i <= 1000:
             for img_data in img_datas:
                 img = img_data[0]
                 coords = img_data[1]
