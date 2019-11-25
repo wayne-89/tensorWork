@@ -798,6 +798,8 @@ def visualize_boxes_and_labels_on_image_array(
         else:
           box_to_color_map[box] = STANDARD_COLORS[
               classes[i] % len(STANDARD_COLORS)]
+  print('######detected box num', len(box_to_color_map.items()))
+  print('######detected box map', box_to_color_map)
 
   # Draw all boxes onto image.
   for box, color in box_to_color_map.items():
@@ -1059,3 +1061,4 @@ class VisualizeSingleFrameDetections(EvalMetricOpsVisualization):
     return draw_side_by_side_evaluation_image(
         eval_dict, self._category_index, self._max_boxes_to_draw,
         self._min_score_thresh, self._use_normalized_coordinates)
+

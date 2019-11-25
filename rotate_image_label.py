@@ -132,7 +132,7 @@ def _data_pre_aug_fn(data):
     width = img_shape[1]
     center = (width * 0.5, height * 0.5)  # x, y
     res = []
-    for deg in [180]:
+    for deg in [90, 180, 270]:
         neww, newh = _largest_rotated_rect(width, height, deg)
         newx = int(center[0] - neww * 0.5)
         newy = int(center[1] - newh * 0.5)
@@ -144,7 +144,9 @@ def _data_pre_aug_fn(data):
             suffix = coord[0].split('.')[-1]
             name = coord[0][0:-len(suffix) - 1]
             img_name = "{0}_{1}.{2}".format(name, deg, suffix)
-            coords_new.append([img_name, str(neww), str(newh), coord[3], str(x), str(y), str(x2), str(y2)])
+            coords_new.append(
+                [img_name, str(neww), str(newh), coord[3], str(min(x, x2)), str(min(y, y2)), str(max(x, x2)),
+                 str(max(y, y2))])
         sub_img = rotate_image(img, deg)
         # print(img_shape, deg, coords, coords_new)
         res.append([sub_img, coords_new])
@@ -156,7 +158,7 @@ PATH_TO_LABELS = sys.argv[2]
 cfg_map = csv_cfg_map(PATH_TO_LABELS)
 
 b_im_name = [name for name in os.listdir(PATH_TO_IMAGE)
-             if name.lower().endswith((".jpg", ".png", ".bmp"))]
+             if name.lower().endswith((".jpg", ".jpeg", ".png", ".bmp"))]
 
 b_im_path = []
 ann_list = []
@@ -174,11 +176,15 @@ data = tl.prepro.threading_data([_ for _ in zip(b_images, ann_list)],
                                 _data_pre_aug_fn)
 
 with open(PATH_TO_LABELS, 'a+') as f:
+    i = 1
     for img_datas in data:
-        for img_data in img_datas:
-            img = img_data[0]
-            coords = img_data[1]
-            tl.vis.save_image(img, os.path.join(PATH_TO_IMAGE, coords[0][0]))
-            # cv2.imwrite(os.path.join(PATH_TO_IMAGE, coords[0][0]), img)
-            for coord in coords:
-                f.write(','.join(coord) + '\n')
+        if i <= 3:
+            for img_data in img_datas:
+                img = img_data[0]
+                coords = img_data[1]
+                tl.vis.save_image(img, os.path.join(PATH_TO_IMAGE, coords[0][0]))
+                # cv2.imwrite(os.path.join(PATH_TO_IMAGE, coords[0][0]), img)
+                for coord in coords:
+                    f.write(','.join(coord) + '\n')
+        i = i + 1
+
