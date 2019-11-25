@@ -113,7 +113,7 @@ num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 IMAGE_PATHS = []
 if not os.path.isfile(PATH_TO_IMAGE):
     for filename in os.listdir(PATH_TO_IMAGE):
-        if filename.endswith(".JPG") or filename.endswith(".jpg"):
+        if filename.lower().endswith((".jpg",".jpeg", ".png", ".bmp")):
             IMAGE_PATHS.append(os.path.join(PATH_TO_IMAGE, filename))
 else:
     IMAGE_PATHS.append(PATH_TO_IMAGE)
@@ -174,3 +174,4 @@ if IMAGE_SHOW:
 
     # # Clean up
     # cv2.destroyAllWindows()
+

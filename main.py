@@ -25,7 +25,7 @@ rotateImage = 'false'
 if cf.has_option(baseSection, "rotate_image"):
     rotateImage = cf.get(baseSection, "rotate_image")
 numExamples = len([name for name in os.listdir(os.path.join(dstPath, 'images/test')) if
-                   name.lower().endswith((".jpg", ".png", ".bmp"))])
+                   name.lower().endswith((".jpg",".jpeg", ".png", ".bmp"))])
 trainCheckPoint = None
 try:
     trainCheckPoint = cf.get(baseSection, "train_check_point")
@@ -103,3 +103,4 @@ os.system(
     'python {0}/export_inference_graph.py --input_type image_tensor --pipeline_config_path {1} --trained_checkpoint_prefix {2}/training/model.ckpt-{3} --output_directory {2}/inference_graph'.format(
         basePath, dstConfigPath, dstPath, numSteps))
 print("###&###|train_finish")
+
