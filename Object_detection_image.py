@@ -111,12 +111,14 @@ detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
 num_detections = detection_graph.get_tensor_by_name('num_detections:0')
 
 IMAGE_PATHS = []
+PATH_TO_IMAGE_DIR = PATH_TO_IMAGE
 if not os.path.isfile(PATH_TO_IMAGE):
     for filename in os.listdir(PATH_TO_IMAGE):
-        if filename.lower().endswith((".jpg",".jpeg", ".png", ".bmp")):
+        if filename.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
             IMAGE_PATHS.append(os.path.join(PATH_TO_IMAGE, filename))
 else:
     IMAGE_PATHS.append(PATH_TO_IMAGE)
+    PATH_TO_IMAGE_DIR = os.path.dirname(PATH_TO_IMAGE)
 for IMAGE_PATH in IMAGE_PATHS:
     # Load image using OpenCV and
     # expand image dimensions to have shape: [1, None, None, 3]
@@ -139,7 +141,6 @@ for IMAGE_PATH in IMAGE_PATHS:
         if _name in labelNameMap:
             _label['name'] = labelNameMap[_name]
     print('image params after', category_index)
-
     v_res = vis_util.visualize_boxes_and_labels_on_image_array(
         image,
         np.squeeze(boxes),
@@ -149,16 +150,26 @@ for IMAGE_PATH in IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=8,
         min_score_thresh=0.60)
-    print('v_res 识别数量: ', len(v_res))
+    image_rec_res = []
+    if len(scores) > 0:
+        print('v_res 识别数量: ', scores[0])
+        for idx in range(0, len(scores[0])):
+            if scores[0][idx] > 0.60:
+                image_rec_res.append(
+                    {'score': float(scores[0][idx]), 'id': int(classes[0][idx]),
+                     'name': category_index[classes[0][idx]]['name']})
+    # print('v_res 识别数量: ', scores, classes, num, image_rec_res)
     # All the results have been drawn on image. Now display the image.
     FULL_NAME = IMAGE_PATH.split("/")
     SHOW_NAME = FULL_NAME[-1]
+    with open(os.path.join(PATH_TO_IMAGE_DIR, 'result', '{0}.out'.format(SHOW_NAME)), 'w', encoding='utf8') as f:
+        json.dump(image_rec_res, f, ensure_ascii=False)
     # plt.figure(SHOW_NAME)
     # plt.imshow(image)
     if IMAGE_SHOW:
         cv2.imshow(SHOW_NAME, image)
     else:
-        write_path = os.path.join(PATH_TO_IMAGE, 'result', SHOW_NAME)
+        write_path = os.path.join(PATH_TO_IMAGE_DIR, 'result', SHOW_NAME)
         print('valid write path: {0}'.format(write_path))
         cv2.imwrite(write_path, image)
 
@@ -174,4 +185,3 @@ if IMAGE_SHOW:
 
     # # Clean up
     # cv2.destroyAllWindows()
-
