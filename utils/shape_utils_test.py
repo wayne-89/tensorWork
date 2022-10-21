@@ -117,14 +117,14 @@ class UtilTest(tf.test.TestCase):
       self.assertAllClose([[0.1, 0.2], [0.2, 0.4]], tt4_result)
 
   def test_combines_static_dynamic_shape(self):
-    tensor = tf.placeholder(tf.float32, shape=(None, 2, 3))
+    tensor = tf.compat.v1.placeholder(tf.float32, shape=(None, 2, 3))
     combined_shape = shape_utils.combined_static_and_dynamic_shape(
         tensor)
-    self.assertTrue(tf.contrib.framework.is_tensor(combined_shape[0]))
+    self.assertTrue(tf.is_tensor(combined_shape[0]))
     self.assertListEqual(combined_shape[1:], [2, 3])
 
   def test_pad_or_clip_nd_tensor(self):
-    tensor_placeholder = tf.placeholder(tf.float32, [None, 5, 4, 7])
+    tensor_placeholder = tf.compat.v1.placeholder(tf.float32, [None, 5, 4, 7])
     output_tensor = shape_utils.pad_or_clip_nd(
         tensor_placeholder, [None, 3, 5, tf.constant(6)])
 
@@ -144,11 +144,11 @@ class StaticOrDynamicMapFnTest(tf.test.TestCase):
 
   def test_with_dynamic_shape(self):
     def fn(input_tensor):
-      return tf.reduce_sum(input_tensor)
-    input_tensor = tf.placeholder(tf.float32, shape=(None, 2))
+      return tf.reduce_sum(input_tensor=input_tensor)
+    input_tensor = tf.compat.v1.placeholder(tf.float32, shape=(None, 2))
     map_fn_output = shape_utils.static_or_dynamic_map_fn(fn, input_tensor)
 
-    op_names = [op.name for op in tf.get_default_graph().get_operations()]
+    op_names = [op.name for op in tf.compat.v1.get_default_graph().get_operations()]
     self.assertTrue(any(['map' == op_name[:3] for op_name in op_names]))
 
     with self.test_session() as sess:
@@ -163,11 +163,11 @@ class StaticOrDynamicMapFnTest(tf.test.TestCase):
 
   def test_with_static_shape(self):
     def fn(input_tensor):
-      return tf.reduce_sum(input_tensor)
+      return tf.reduce_sum(input_tensor=input_tensor)
     input_tensor = tf.constant([[1, 2], [3, 1], [0, 4]], dtype=tf.float32)
     map_fn_output = shape_utils.static_or_dynamic_map_fn(fn, input_tensor)
 
-    op_names = [op.name for op in tf.get_default_graph().get_operations()]
+    op_names = [op.name for op in tf.compat.v1.get_default_graph().get_operations()]
     self.assertTrue(all(['map' != op_name[:3] for op_name in op_names]))
 
     with self.test_session() as sess:
@@ -179,12 +179,12 @@ class StaticOrDynamicMapFnTest(tf.test.TestCase):
       input_tensor, scalar_index_tensor = elems
       return tf.reshape(tf.slice(input_tensor, scalar_index_tensor, [1]), [])
 
-    input_tensor = tf.placeholder(tf.float32, shape=(None, 3))
-    scalar_index_tensor = tf.placeholder(tf.int32, shape=(None, 1))
+    input_tensor = tf.compat.v1.placeholder(tf.float32, shape=(None, 3))
+    scalar_index_tensor = tf.compat.v1.placeholder(tf.int32, shape=(None, 1))
     map_fn_output = shape_utils.static_or_dynamic_map_fn(
         fn, [input_tensor, scalar_index_tensor], dtype=tf.float32)
 
-    op_names = [op.name for op in tf.get_default_graph().get_operations()]
+    op_names = [op.name for op in tf.compat.v1.get_default_graph().get_operations()]
     self.assertTrue(any(['map' == op_name[:3] for op_name in op_names]))
 
     with self.test_session() as sess:
@@ -212,7 +212,7 @@ class StaticOrDynamicMapFnTest(tf.test.TestCase):
     map_fn_output = shape_utils.static_or_dynamic_map_fn(
         fn, [input_tensor, scalar_index_tensor], dtype=tf.float32)
 
-    op_names = [op.name for op in tf.get_default_graph().get_operations()]
+    op_names = [op.name for op in tf.compat.v1.get_default_graph().get_operations()]
     self.assertTrue(all(['map' != op_name[:3] for op_name in op_names]))
 
     with self.test_session() as sess:
@@ -241,7 +241,7 @@ class CheckMinImageShapeTest(tf.test.TestCase):
       _ = shape_utils.check_min_image_dim(64, input_tensor)
 
   def test_check_min_image_dim_dynamic_shape(self):
-    input_placeholder = tf.placeholder(tf.float32, shape=[1, None, None, 3])
+    input_placeholder = tf.compat.v1.placeholder(tf.float32, shape=[1, None, None, 3])
     image_tensor = shape_utils.check_min_image_dim(33, input_placeholder)
 
     with self.test_session() as sess:
@@ -273,8 +273,8 @@ class AssertShapeEqualTest(tf.test.TestCase):
       sess.run(op)
 
   def test_unequal_dynamic_shape_raises_tf_assert(self):
-    tensor_a = tf.placeholder(tf.float32, shape=[1, None, None, 3])
-    tensor_b = tf.placeholder(tf.float32, shape=[1, None, None, 3])
+    tensor_a = tf.compat.v1.placeholder(tf.float32, shape=[1, None, None, 3])
+    tensor_b = tf.compat.v1.placeholder(tf.float32, shape=[1, None, None, 3])
     op = shape_utils.assert_shape_equal(
         shape_utils.combined_static_and_dynamic_shape(tensor_a),
         shape_utils.combined_static_and_dynamic_shape(tensor_b))
@@ -284,8 +284,8 @@ class AssertShapeEqualTest(tf.test.TestCase):
                                 tensor_b: np.zeros([1, 4, 4, 3])})
 
   def test_equal_dynamic_shape_succeeds(self):
-    tensor_a = tf.placeholder(tf.float32, shape=[1, None, None, 3])
-    tensor_b = tf.placeholder(tf.float32, shape=[1, None, None, 3])
+    tensor_a = tf.compat.v1.placeholder(tf.float32, shape=[1, None, None, 3])
+    tensor_b = tf.compat.v1.placeholder(tf.float32, shape=[1, None, None, 3])
     op = shape_utils.assert_shape_equal(
         shape_utils.combined_static_and_dynamic_shape(tensor_a),
         shape_utils.combined_static_and_dynamic_shape(tensor_b))
@@ -312,8 +312,8 @@ class AssertShapeEqualTest(tf.test.TestCase):
       sess.run(op)
 
   def test_unequal_dynamic_shape_along_first_dim_raises_tf_assert(self):
-    tensor_a = tf.placeholder(tf.float32, shape=[None, None, None, 3])
-    tensor_b = tf.placeholder(tf.float32, shape=[None, None, 3])
+    tensor_a = tf.compat.v1.placeholder(tf.float32, shape=[None, None, None, 3])
+    tensor_b = tf.compat.v1.placeholder(tf.float32, shape=[None, None, 3])
     op = shape_utils.assert_shape_equal_along_first_dimension(
         shape_utils.combined_static_and_dynamic_shape(tensor_a),
         shape_utils.combined_static_and_dynamic_shape(tensor_b))
@@ -323,8 +323,8 @@ class AssertShapeEqualTest(tf.test.TestCase):
                                 tensor_b: np.zeros([2, 4, 3])})
 
   def test_equal_dynamic_shape_along_first_dim_succeeds(self):
-    tensor_a = tf.placeholder(tf.float32, shape=[None, None, None, 3])
-    tensor_b = tf.placeholder(tf.float32, shape=[None])
+    tensor_a = tf.compat.v1.placeholder(tf.float32, shape=[None, None, None, 3])
+    tensor_b = tf.compat.v1.placeholder(tf.float32, shape=[None])
     op = shape_utils.assert_shape_equal_along_first_dimension(
         shape_utils.combined_static_and_dynamic_shape(tensor_a),
         shape_utils.combined_static_and_dynamic_shape(tensor_b))
@@ -336,7 +336,7 @@ class AssertShapeEqualTest(tf.test.TestCase):
 class FlattenExpandDimensionTest(tf.test.TestCase):
 
   def test_flatten_given_dims(self):
-    inputs = tf.random_uniform([5, 2, 10, 10, 3])
+    inputs = tf.random.uniform([5, 2, 10, 10, 3])
     actual_flattened = shape_utils.flatten_dimensions(inputs, first=1, last=3)
     expected_flattened = tf.reshape(inputs, [5, 20, 10, 3])
     with self.test_session() as sess:
@@ -345,7 +345,7 @@ class FlattenExpandDimensionTest(tf.test.TestCase):
     self.assertAllClose(expected_flattened_np, actual_flattened_np)
 
   def test_raises_value_error_incorrect_dimensions(self):
-    inputs = tf.random_uniform([5, 2, 10, 10, 3])
+    inputs = tf.random.uniform([5, 2, 10, 10, 3])
     with self.assertRaises(ValueError):
       shape_utils.flatten_dimensions(inputs, first=0, last=6)
 
@@ -398,7 +398,7 @@ class FlattenExpandDimensionTest(tf.test.TestCase):
             [[3, 4]],
             [[5, 6]],
         ], dtype=tf.int32)
-    inputs = tf.placeholder_with_default(inputs_default, [None, 1, 2])
+    inputs = tf.compat.v1.placeholder_with_default(inputs_default, [None, 1, 2])
     dims = [3, 2]
     expanded_tensor = shape_utils.expand_first_dimension(
         inputs, dims)

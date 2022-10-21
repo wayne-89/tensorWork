@@ -49,7 +49,7 @@ class MockMaskHead(object):
     self._num_classes = num_classes
 
   def predict(self, features):
-    batch_size = tf.shape(features)[0]
+    batch_size = tf.shape(input=features)[0]
     return tf.zeros((batch_size, 1, self._num_classes, DEFAULT_MASK_SIZE,
                      DEFAULT_MASK_SIZE),
                     dtype=tf.float32)
@@ -69,7 +69,7 @@ class MockBoxPredictor(box_predictor.BoxPredictor):
     batch_size = combined_feature_shape[0]
     num_anchors = (combined_feature_shape[1] * combined_feature_shape[2])
     code_size = 4
-    zero = tf.reduce_sum(0 * image_feature)
+    zero = tf.reduce_sum(input_tensor=0 * image_feature)
     num_class_slots = self.num_classes
     if self._add_background_class:
       num_class_slots = num_class_slots + 1
@@ -101,7 +101,7 @@ class MockKerasBoxPredictor(box_predictor.KerasBoxPredictor):
     batch_size = combined_feature_shape[0]
     num_anchors = (combined_feature_shape[1] * combined_feature_shape[2])
     code_size = 4
-    zero = tf.reduce_sum(0 * image_feature)
+    zero = tf.reduce_sum(input_tensor=0 * image_feature)
     num_class_slots = self.num_classes
     if self._add_background_class:
       num_class_slots = num_class_slots + 1

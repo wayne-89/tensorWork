@@ -52,9 +52,9 @@ from object_detection.builders import model_builder
 from object_detection.legacy import trainer
 from object_detection.utils import config_util
 
-tf.logging.set_verbosity(tf.logging.INFO)
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.INFO)
 
-flags = tf.app.flags
+flags = tf.compat.v1.app.flags
 flags.DEFINE_string('master', '', 'Name of the TensorFlow master to use.')
 flags.DEFINE_integer('task', 0, 'task id')
 flags.DEFINE_integer('num_clones', 1, 'Number of clones to deploy per worker.')
@@ -84,15 +84,15 @@ flags.DEFINE_string('model_config_path', '',
 FLAGS = flags.FLAGS
 
 
-@tf.contrib.framework.deprecated(None, 'Use object_detection/model_main.py.')
+# @tf.contrib.framework.deprecated(None, 'Use object_detection/model_main.py.')
 def main(_):
   assert FLAGS.train_dir, '`train_dir` is missing.'
-  if FLAGS.task == 0: tf.gfile.MakeDirs(FLAGS.train_dir)
+  if FLAGS.task == 0: tf.io.gfile.makedirs(FLAGS.train_dir)
   if FLAGS.pipeline_config_path:
     configs = config_util.get_configs_from_pipeline_file(
         FLAGS.pipeline_config_path)
     if FLAGS.task == 0:
-      tf.gfile.Copy(FLAGS.pipeline_config_path,
+      tf.io.gfile.copy(FLAGS.pipeline_config_path,
                     os.path.join(FLAGS.train_dir, 'pipeline.config'),
                     overwrite=True)
   else:
@@ -104,7 +104,7 @@ def main(_):
       for name, config in [('model.config', FLAGS.model_config_path),
                            ('train.config', FLAGS.train_config_path),
                            ('input.config', FLAGS.input_config_path)]:
-        tf.gfile.Copy(config, os.path.join(FLAGS.train_dir, name),
+        tf.io.gfile.copy(config, os.path.join(FLAGS.train_dir, name),
                       overwrite=True)
 
   model_config = configs['model']
@@ -117,8 +117,7 @@ def main(_):
       is_training=True)
 
   def get_next(config):
-    return dataset_builder.make_initializable_iterator(
-        dataset_builder.build(config)).get_next()
+    return dataset_builder.make_initializable_iterator(dataset_builder.build(config)).get_next()
 
   create_input_dict_fn = functools.partial(get_next, input_config)
 
@@ -147,7 +146,7 @@ def main(_):
 
   if worker_replicas >= 1 and ps_tasks > 0:
     # Set up distributed training.
-    server = tf.train.Server(tf.train.ClusterSpec(cluster), protocol='grpc',
+    server = tf.distribute.Server(tf.train.ClusterSpec(cluster), protocol='grpc',
                              job_name=task_info.type,
                              task_index=task_info.index)
     if task_info.type == 'ps':
@@ -164,21 +163,9 @@ def main(_):
     graph_rewriter_fn = graph_rewriter_builder.build(
         configs['graph_rewriter_config'], is_training=True)
 
-  trainer.train(
-      create_input_dict_fn,
-      model_fn,
-      train_config,
-      master,
-      task,
-      FLAGS.num_clones,
-      worker_replicas,
-      FLAGS.clone_on_cpu,
-      ps_tasks,
-      worker_job_name,
-      is_chief,
-      FLAGS.train_dir,
-      graph_hook_fn=graph_rewriter_fn)
-
+  os.system(
+    'python model_main_tf2.py --pipeline_config_path={0} --model_dir={1} --alsologtostderr --checkpoint_dir={2}'.format(
+      FLAGS.pipeline_config_path, FLAGS.model_config_path, FLAGS.train_dir))
 
 if __name__ == '__main__':
-  tf.app.run()
+  tf.compat.v1.app.run()

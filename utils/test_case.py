@@ -18,7 +18,7 @@ import os
 import tensorflow as tf
 from tensorflow.contrib import tpu
 
-flags = tf.app.flags
+flags = tf.compat.v1.app.flags
 
 flags.DEFINE_bool('tpu_test', False, 'Whether to configure test for TPU.')
 FLAGS = flags.FLAGS
@@ -42,11 +42,11 @@ class TestCase(tf.test.TestCase):
       graph.
     """
     with self.test_session(graph=tf.Graph()) as sess:
-      placeholders = [tf.placeholder_with_default(v, v.shape) for v in inputs]
+      placeholders = [tf.compat.v1.placeholder_with_default(v, v.shape) for v in inputs]
       tpu_computation = tpu.rewrite(graph_fn, placeholders)
       sess.run(tpu.initialize_system())
-      sess.run([tf.global_variables_initializer(), tf.tables_initializer(),
-                tf.local_variables_initializer()])
+      sess.run([tf.compat.v1.global_variables_initializer(), tf.compat.v1.tables_initializer(),
+                tf.compat.v1.local_variables_initializer()])
       materialized_results = sess.run(tpu_computation,
                                       feed_dict=dict(zip(placeholders, inputs)))
       sess.run(tpu.shutdown_system())
@@ -70,10 +70,10 @@ class TestCase(tf.test.TestCase):
       graph.
     """
     with self.test_session(graph=tf.Graph()) as sess:
-      placeholders = [tf.placeholder_with_default(v, v.shape) for v in inputs]
+      placeholders = [tf.compat.v1.placeholder_with_default(v, v.shape) for v in inputs]
       results = graph_fn(*placeholders)
-      sess.run([tf.global_variables_initializer(), tf.tables_initializer(),
-                tf.local_variables_initializer()])
+      sess.run([tf.compat.v1.global_variables_initializer(), tf.compat.v1.tables_initializer(),
+                tf.compat.v1.local_variables_initializer()])
       materialized_results = sess.run(results, feed_dict=dict(zip(placeholders,
                                                                   inputs)))
 

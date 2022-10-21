@@ -11,35 +11,6 @@ jitter = 0.2
 im_size = [416, 416]  # 输出图的大小
 
 
-# {xxx:[[filename,width,height,class,xmin,ymin,xmax,ymax]]}
-def xml_cfg_map(path):
-    cfg_map = {}
-    for xml_file in glob.glob(path + '/*.xml'):
-        tree = ET.parse(xml_file)
-        root = tree.getroot()
-        filename = root.find('filename').text
-        size = root.find('size')
-        width = size.find('width').text
-        height = size.find('height').text
-        list = []
-        for member in root.findall('object'):
-            # class x y x1 y1
-            value = [
-                filename,
-                width,
-                height,
-                member[0].text,  # class
-                int(member[4][0].text),  # xmin
-                int(member[4][1].text),  # ymin
-                int(member[4][2].text),  # xmax
-                int(member[4][3].text)  # ymax
-            ]
-            list.append(value)
-        cfg_map[filename] = list
-    print('xml_cfg_map', cfg_map)
-    return cfg_map
-
-
 def csv_cfg_map(path):
     cfg_map = {}
     with open(path, "r") as f:
@@ -167,7 +138,7 @@ for name in b_im_name:
     cfg = []
     if name in cfg_map:
         cfg = cfg_map[name]
-    ann_list.append(cfg)
+        ann_list.append(cfg)
 
 # 多线程处理
 b_images = tl.prepro.threading_data(b_im_path, fn=tl.vis.read_image)
@@ -185,6 +156,6 @@ with open(PATH_TO_LABELS, 'a+') as f:
                 tl.vis.save_image(img, os.path.join(PATH_TO_IMAGE, coords[0][0]))
                 # cv2.imwrite(os.path.join(PATH_TO_IMAGE, coords[0][0]), img)
                 for coord in coords:
-                    f.write(','.join(coord) + '\n')
+                    f.write('\n'+(','.join(coord)))
         i = i + 1
 

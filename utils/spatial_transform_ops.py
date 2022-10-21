@@ -305,7 +305,7 @@ def multilevel_roi_align(features, boxes, box_levels, output_size,
     A 5D float tensor of shape [batch_size, num_boxes, output_size[0],
     output_size[1], channels] representing the cropped features.
   """
-  with tf.name_scope(scope, 'MultiLevelRoIAlign'):
+  with tf.compat.v1.name_scope(scope, 'MultiLevelRoIAlign'):
     features, true_feature_shapes = pad_to_max_size(features)
     (batch_size, num_levels, max_feature_height, max_feature_width,
      num_filters) = features.get_shape().as_list()
@@ -333,7 +333,7 @@ def multilevel_roi_align(features, boxes, box_levels, output_size,
                                         max_feature_width, box_levels)
     valid_indices = _valid_indicator(feature_grid_y, feature_grid_x,
                                      true_feature_shapes)
-    feature_coordinates = tf.where(valid_indices, feature_coordinates,
+    feature_coordinates = tf.compat.v1.where(valid_indices, feature_coordinates,
                                    -1 * tf.ones_like(feature_coordinates))
     flattened_features = tf.reshape(features, [-1, num_filters])
     flattened_feature_values = _gather_valid_indices(flattened_features,
@@ -382,10 +382,10 @@ def multilevel_roi_align(features, boxes, box_levels, output_size,
 
     # This combines the two pooling operations - sum_pool to perform bilinear
     # interpolation and avg_pool to pool the values in each bin.
-    features_per_box = tf.nn.avg_pool(
-        features_per_box,
-        [1, num_samples_per_cell_y * 2, num_samples_per_cell_x * 2, 1],
-        [1, num_samples_per_cell_y * 2, num_samples_per_cell_x * 2, 1], 'VALID')
+    features_per_box = tf.nn.avg_pool2d(
+        input=features_per_box,
+        ksize=[1, num_samples_per_cell_y * 2, num_samples_per_cell_x * 2, 1],
+        strides=[1, num_samples_per_cell_y * 2, num_samples_per_cell_x * 2, 1], padding='VALID')
     features_per_box = tf.reshape(
         features_per_box,
         [batch_size, num_boxes, output_size[0], output_size[1], num_filters])
@@ -398,18 +398,18 @@ def native_crop_and_resize(image, boxes, crop_size, scope=None):
   def get_box_inds(proposals):
     proposals_shape = proposals.get_shape().as_list()
     if any(dim is None for dim in proposals_shape):
-      proposals_shape = tf.shape(proposals)
+      proposals_shape = tf.shape(input=proposals)
     ones_mat = tf.ones(proposals_shape[:2], dtype=tf.int32)
     multiplier = tf.expand_dims(
         tf.range(start=0, limit=proposals_shape[0]), 1)
     return tf.reshape(ones_mat * multiplier, [-1])
 
-  with tf.name_scope(scope, 'CropAndResize'):
+  with tf.compat.v1.name_scope(scope, 'CropAndResize'):
     cropped_regions = tf.image.crop_and_resize(
         image, tf.reshape(boxes, [-1] + boxes.shape.as_list()[2:]),
         get_box_inds(boxes), crop_size)
-    final_shape = tf.concat([tf.shape(boxes)[:2],
-                             tf.shape(cropped_regions)[1:]], axis=0)
+    final_shape = tf.concat([tf.shape(input=boxes)[:2],
+                             tf.shape(input=cropped_regions)[1:]], axis=0)
     return tf.reshape(cropped_regions, final_shape)
 
 
@@ -462,7 +462,7 @@ def matmul_crop_and_resize(image, boxes, crop_size, extrapolation_value=0.0,
   Returns:
     A 5-D tensor of shape `[batch, num_boxes, crop_height, crop_width, depth]`
   """
-  with tf.name_scope(scope, 'MatMulCropAndResize'):
+  with tf.compat.v1.name_scope(scope, 'MatMulCropAndResize'):
     box_levels = tf.zeros(boxes.shape.as_list()[:2], dtype=tf.int32)
     return multilevel_roi_align([image],
                                 boxes,

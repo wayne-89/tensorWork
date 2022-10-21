@@ -469,7 +469,7 @@ class ObjectDetectionEvaluator(DetectionEvaluator):
 
     args = [eval_dict_filtered[standard_fields.InputDataFields.key]]
     args.extend(eval_dict_filtered.values())
-    update_op = tf.py_func(update_op, args, [])
+    update_op = tf.compat.v1.py_func(update_op, args, [])
 
     def first_value_func():
       self._metrics = self.evaluate()
@@ -484,11 +484,11 @@ class ObjectDetectionEvaluator(DetectionEvaluator):
       return value_func
 
     # Ensure that the metrics are only evaluated once.
-    first_value_op = tf.py_func(first_value_func, [], tf.float32)
+    first_value_op = tf.compat.v1.py_func(first_value_func, [], tf.float32)
     eval_metric_ops = {self._metric_names[0]: (first_value_op, update_op)}
     with tf.control_dependencies([first_value_op]):
       for metric_name in self._metric_names[1:]:
-        eval_metric_ops[metric_name] = (tf.py_func(
+        eval_metric_ops[metric_name] = (tf.compat.v1.py_func(
             value_func_factory(metric_name), [], np.float32), update_op)
     return eval_metric_ops
 

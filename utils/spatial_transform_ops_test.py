@@ -383,20 +383,20 @@ class MultiLevelRoIAlignTest(test_case.TestCase):
         ], dtype=np.float32) / input_size
         boxes = np.tile(boxes, [batch_size, 1, 1])
         tf_boxes = tf.constant(boxes)
-        tf_levels = tf.random_uniform([batch_size, num_boxes], maxval=5,
+        tf_levels = tf.random.uniform([batch_size, num_boxes], maxval=5,
                                       dtype=tf.int32)
         def crop_and_resize_fn():
           return spatial_ops.multilevel_roi_align(
               features, tf_boxes, tf_levels, output_size)
 
-        tpu_crop_and_resize_fn = tf.contrib.tpu.rewrite(crop_and_resize_fn)
-        sess.run(tf.contrib.tpu.initialize_system())
-        sess.run(tf.global_variables_initializer())
+        tpu_crop_and_resize_fn = tf.compat.v1.tpu.rewrite(crop_and_resize_fn)
+        sess.run(tf.compat.v1.tpu.initialize_system())
+        sess.run(tf.compat.v1.global_variables_initializer())
         roi_features = sess.run(tpu_crop_and_resize_fn)
         self.assertEqual(roi_features[0].shape,
                          (batch_size, num_boxes, output_size[0], output_size[1],
                           num_filters))
-        sess.run(tf.contrib.tpu.shutdown_system())
+        sess.run(tf.compat.v1.tpu.shutdown_system())
 
 
 class MatMulCropAndResizeTest(test_case.TestCase):
