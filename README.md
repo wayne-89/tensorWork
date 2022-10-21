@@ -1,4 +1,4 @@
-使用的系统：ubuntu 16.04 LTS
+使用的系统：Ubuntu 20.04
 
 ## 安装
 1. 安装conda, 需要输入的地方输入yes
@@ -20,14 +20,14 @@ bash Anaconda3-5.0.1-Linux-x86_64.sh
 3. 安装其他组件
   ```shell
   conda install -c anaconda protobuf
-  pip install pillow lxml Cython contextlib2 jupyter matplotlib pandas opencv-python ConfigParser nets  
+  pip install pillow lxml Cython contextlib2 jupyter matplotlib pandas opencv-python ConfigParser nets imgaug
   ```
 
 4. 安装物体识别
 ```
 git clone https://github.com/tensorflow/models.git
 cd models/research
-protoc --python_out=. ./object_detection/protos/anchor_generator.proto ./object_detection/protos/argmax_matcher.proto ./object_detection/protos/bipartite_matcher.proto ./object_detection/protos/box_coder.proto ./object_detection/protos/box_predictor.proto ./object_detection/protos/eval.proto ./object_detection/protos/faster_rcnn.proto ./object_detection/protos/faster_rcnn_box_coder.proto ./object_detection/protos/grid_anchor_generator.proto ./object_detection/protos/hyperparams.proto ./object_detection/protos/image_resizer.proto ./object_detection/protos/input_reader.proto ./object_detection/protos/losses.proto ./object_detection/protos/matcher.proto ./object_detection/protos/mean_stddev_box_coder.proto ./object_detection/protos/model.proto ./object_detection/protos/optimizer.proto ./object_detection/protos/pipeline.proto ./object_detection/protos/post_processing.proto ./object_detection/protos/preprocessor.proto ./object_detection/protos/region_similarity_calculator.proto ./object_detection/protos/square_box_coder.proto ./object_detection/protos/ssd.proto ./object_detection/protos/ssd_anchor_generator.proto ./object_detection/protos/string_int_label_map.proto ./object_detection/protos/train.proto ./object_detection/protos/keypoint_box_coder.proto ./object_detection/protos/multiscale_anchor_generator.proto ./object_detection/protos/graph_rewriter.proto ./object_detection/protos/calibration.proto ./object_detection/protos/flexible_grid_anchor_generator.proto
+protoc object_detection/protos/*.proto --python_out=.
 
 python setup.py build
 
@@ -87,7 +87,14 @@ valid 下放用于验证训练结果的图片，不同于train test的图片
 ```
 [base]
 num_classes=2
-num_steps=1000
+num_steps=100
+batch_size=1
+learning_rate=0.0002
+rotate_image=true
+crop_image=false
+scale_image=true
+visual_image=true
+restart_train=true
 [label]
 1=pan
 2=luoshuan
@@ -95,6 +102,11 @@ num_steps=1000
 num_classes 表示要训练的分类数量， 与 label中的数量相等
 num_steps 表示训练的步数
 label中为图片标注时用的label名称，按序填写
+rotate_image 是否旋转图片(每45度旋转一次)
+crop_image 是否剪切图片
+scale_image 是否缩放图片
+visual_image 是否视觉处理(噪声、模糊、扭曲等)
+restart_train 是否重新开始训练
 
 7. 进行训练
 ```python tensorWork/main.py tensorWork/datas/example```
