@@ -1,4 +1,3 @@
-import tensorlayer as tl
 import sys
 import os
 import glob
