@@ -18,8 +18,8 @@ flags.DEFINE_string('PATH_TO_LABELS', None,
 flags.DEFINE_string('NEW_PATH_TO_IMAGE_DIR', None, '处理结果的存放地址,图片标注也会输出到该文件夹下')
 flags.DEFINE_string(
     'OPERATES', None, '操作项，多个请用,分割,取值范围: rotate,crop,scale,visual')
-flags.DEFINE_bool(
-    'DEBUG_ON', False, '是否开启调试模式,默认关闭')
+flags.DEFINE_string(
+    'DEBUG_ON', 'False', '是否开启调试模式,默认关闭')
 
 
 
@@ -43,7 +43,7 @@ def csv_cfg_map(path):
 
 
 def compose(path,name,anns,new_path,method,params):
-    DEBUG_ON = FLAGS.DEBUG_ON
+    DEBUG_ON = FLAGS.DEBUG_ON is not None and FLAGS.DEBUG_ON=='True'
     image = cv2.imread(os.path.join(path, name), 1)
     bbs = BoundingBoxesOnImage([
             BoundingBox(x1=int(ann[4]), y1=int(ann[5]), x2=int(ann[6]), y2=int(ann[7]),label=ann[3]) for ann in anns

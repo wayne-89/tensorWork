@@ -88,11 +88,13 @@ f.close()
 os.system('python {0}/xml_to_csv.py {1}'.format(basePath, dstPath))
 # expand image to be equal
 os.system('rm -rf {0}/images/train_out'.format(dstPath))
-operatesArg=','.join(imageOperates)
-os.system('python {0}/img_enhance.py --PATH_TO_IMAGE_DIR {1}/images/train --PATH_TO_LABELS {1}/images/train_labels.csv  --NEW_PATH_TO_IMAGE_DIR {1}/images/train_out -DEBUG_ON False --OPERATES {2}'.format(basePath, dstPath,operatesArg))
+operatesArg='None'
+if len(imageOperates)>0:
+    operatesArg=','.join(imageOperates)
+os.system('python {0}/img_enhance.py --PATH_TO_IMAGE_DIR {1}/images/train --PATH_TO_LABELS {1}/images/train_labels.csv  --NEW_PATH_TO_IMAGE_DIR {1}/images/train_out --DEBUG_ON False --OPERATES {2}'.format(basePath, dstPath,operatesArg))
 # os.system('python {0}/equal_image_label.py {1}/images/train {1}/images/train_labels.csv  {1}/images/train_out'.format(basePath, dstPath))
 os.system('rm -rf {0}/images/test_out'.format(dstPath))
-os.system('python {0}/img_enhance.py --PATH_TO_IMAGE_DIR {1}/images/test --PATH_TO_LABELS {1}/images/test_labels.csv  --NEW_PATH_TO_IMAGE_DIR {1}/images/test_out -DEBUG_ON False --OPERATES {2}'.format(basePath, dstPath,operatesArg))
+os.system('python {0}/img_enhance.py --PATH_TO_IMAGE_DIR {1}/images/test --PATH_TO_LABELS {1}/images/test_labels.csv  --NEW_PATH_TO_IMAGE_DIR {1}/images/test_out --DEBUG_ON False --OPERATES {2}'.format(basePath, dstPath,operatesArg))
 # os.system('python {0}/equal_image_label.py {1}/images/test {1}/images/test_labels.csv  {1}/images/test_out'.format(basePath, dstPath))
 
 
